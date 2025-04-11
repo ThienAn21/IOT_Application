@@ -27,7 +27,7 @@ uint32_t previousTelemetrySend;
 // Firmware title and version used to compare with remote version, to check if an update is needed.
 // Title needs to be the same and version needs to be different --> downgrading is possible
 constexpr char CURRENT_FIRMWARE_TITLE[] = "LEDBLINK";
-constexpr char CURRENT_FIRMWARE_VERSION[] = "1.1";
+constexpr char CURRENT_FIRMWARE_VERSION[] = "1.2";
 // Maximum amount of retries we attempt to download each firmware chunck over MQTT
 constexpr uint8_t FIRMWARE_FAILURE_RETRIES = 12U;
 // Size of each firmware chunck downloaded over MQTT,
@@ -277,7 +277,7 @@ void setup() {
   Serial.begin(SERIAL_DEBUG_BAUD);
   pinMode(LED_PIN, OUTPUT);
   delay(1000);
-  digitalWrite(LED_PIN, HIGH);
+  digitalWrite(LED_PIN, LOW);
 
   #ifdef DHT20_EN
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -290,7 +290,7 @@ void setup() {
   }
   #endif
 
-  // xTaskCreate(ledBlinkTask, "ledBlinkTask", 4096, NULL, 1, NULL);
+  xTaskCreate(ledBlinkTask, "ledBlinkTask", 4096, NULL, 1, NULL);
   xTaskCreate(InitWiFiTask, "InitWiFiTask", 4096, NULL, 1, NULL);
   xTaskCreate(connectTBTask, "connectTBTask ", 8192, NULL, 1, NULL);
   xTaskCreate(UpdateFirmwareTask, "UpdateFirmwareTask ", 8192, NULL, 1, NULL);
